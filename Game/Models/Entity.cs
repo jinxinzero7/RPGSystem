@@ -4,97 +4,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Models
+namespace Game
 {
-    internal class Entity : IFigthable
+    public abstract class Entity : IFightable
     {
         private int _healthPoints;
         public int HealthPoints
         {
             get => _healthPoints;
-            
-            set
-            {
-                if (value < 0)
-                {
-                    Console.WriteLine("Здоровье не может быть меньше нуля");
-                }
-                else
-                {
-                    _healthPoints = value;
-                }
-            }
+            // тернарный оператор для сеттера здоровья
+            set => _healthPoints = value < 0 ? 0 : value;
         }
 
         private int _attackDamage;
         public int AttackDamage
         {
             get => _attackDamage;
-            set
-            {
-                if (value < 0)
-                {
-                    Console.WriteLine("Атака не может быть меньше нуля");
-                }
-                else
-                {
-                    _attackDamage = value;
-                }
-            }
+            // тернарный оператор для сеттера атаки
+            set => _attackDamage = value < 0 ? 0 : value;
         }
 
+        // конструктор entity
         public Entity(int hp, int atck) 
         {
             AttackDamage = atck;
             HealthPoints = hp;
         }
 
-        public void Fight(Entity entity1)
+        // метод описывающий сражение между двумя классами наследующими интерфейс IFightable
+        public void Fight(IFightable target)
         {
-            if (entity1 != null)
+            // проверка на null
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            // само сражение
+            while (HealthPoints > 0 && target.HealthPoints > 0)
             {
-                try
-                {
-                    int entityTempHealth = entity1.HealthPoints;
-                    int selfTempHealth = HealthPoints;
-
-                    while (HealthPoints > 0 && entity1.HealthPoints > 0)
-                    {
-                        entityTempHealth -= AttackDamage;
-                        if (entityTempHealth > 0)
-                        {
-                            selfTempHealth -= entity1.AttackDamage;
-                        }
-                        if (selfTempHealth <= 0)
-                        {
-                            selfTempHealth = 0;
-                            HealthPoints = selfTempHealth;
-                        }
-                        if (entityTempHealth <= 0)
-                        {
-                            entityTempHealth = 0;
-                            entity1.HealthPoints = entityTempHealth;
-                        }
-                    }
-                    if (HealthPoints < 0 && entity1.HealthPoints < 0)
-                        Console.WriteLine("Ничья");
-
-                    else if (HealthPoints < 0)
-                        Console.WriteLine("Вы проиграли");
-                    else if (entity1.HealthPoints < 0)
-                        Console.WriteLine("Вы выиграли");
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Исключение: {ex.Message}");
-                }
+                target.HealthPoints -= AttackDamage;
+                if (target.HealthPoints > 0)
+                    HealthPoints -= target.AttackDamage;
             }
+
+            // проверка результатов сражения
+            if (HealthPoints <= 0 && target.HealthPoints <= 0)
+                Console.WriteLine("Ничья");
+            else if (HealthPoints <= 0)
+                Console.WriteLine("Вы проиграли");
+            else
+                Console.WriteLine("Вы выиграли");
         }
 
         public override string ToString() 
         {
-            return $"Здоровье: {HealthPoints}, Атака: {AttackDamage}.";
+            return $"Здоровье: {HealthPoints}, Атака: {AttackDamage}";
         }
 
     }

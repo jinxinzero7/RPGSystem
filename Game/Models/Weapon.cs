@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Game.Models
+namespace Game
 {
-    internal class Weapon
+    public class Weapon
     {
         public string Name { get; set; }
 
@@ -49,14 +49,20 @@ namespace Game.Models
 
         public Weapon(string name, int atckBuff, float atckSpeed)
         {
-            Name = name;
-            AttackBuff = atckBuff;
-            AttackSpeed = atckSpeed;
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Название оружия не может быть пустым.");
+            else
+            {
+                Name = name;
+                AttackBuff = atckBuff;
+                AttackSpeed = atckSpeed;
+            }
+               
         }
 
         public override string ToString()
         {
-            return $"{Name}: \nУрон: {AttackBuff}\nСкорость атаки: {AttackSpeed}";
+            return $"{Name} \nУрон: {AttackBuff}\nСкорость атаки: {AttackSpeed}";
         }
     }
 }
