@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Models
+namespace Game
 {
-    internal interface IFigthable
+    public interface IFightable
     {
-        public void Fight(IFightable target);
+        int HealthPoints { get; set; }
+        int AttackDamage { get; set; }
+        void Fight(IFightable target);
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Models
+namespace Game
 {
-    internal class Arsenal
+    public class Arsenal
     {
         public List<Weapon> Weapons { get; set; }
 
